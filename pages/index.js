@@ -43,7 +43,7 @@ export default function Home({initialPosts}) {
   }
 
   return (
-    <div className="flex flex-col items-center justify-center mt-9">
+    <div className="flex flex-col items-center justify-center mt-5">
       <div className="w-[70%] md:w-[50%] lg:w-[55%]">
         <Hero />
         <Search setPosts={setPosts} setFilterOn={setFilterOn} initialPosts={initialPosts}/>

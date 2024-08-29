@@ -16,7 +16,7 @@ function Search({setPosts, setFilterOn, initialPosts}) {
         setFilterOn(true);
     }
     return (
-        <div className='mt-7'>
+        <div className='mt-5'>
             <div className="max-w-md mx-auto">   
                 <label htmlFor="default-search" className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white">Search</label>
                 <div className="relative">
