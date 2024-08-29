@@ -7,11 +7,11 @@ function Posts({posts, profiles}) {
   const [modal, setModal] = useState(false);
 
   return (
-    <div className='mb-5'>
+    <div className='mb-5 w-full'>
       {posts.length > 0 ? (
         <>
           <PostModal post={post} setModal={setModal} modal={true} profile={profiles}/>
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5 mt-5 px-10'>
+            <div className='flex overflow-x-scroll gap-5 mt-5 px-7'>
               {posts.map((item)=>(
                   <div onClick={()=>
                     {setPost(item);

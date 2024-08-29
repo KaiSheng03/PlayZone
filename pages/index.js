@@ -69,7 +69,6 @@ export default function Home({initialPosts}) {
         {posts? <Posts posts={posts} profiles={false}/>:null}
         </>
       )}
-      
     </div>
   )
 }

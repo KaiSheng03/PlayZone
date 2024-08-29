@@ -52,31 +52,47 @@ function Header() {
     },[session])
     
     return (
-        <div className='flex justify-between p-3 border-b-[2px] border-[#FF3366]'>
-            <img src='./Images/logo.png' className='cursor-pointer' width={150} alt='ninja player logo' onClick={()=>router.push('/')}/>
+        <div className='flex items-center justify-between p-3 border-b-[2px] border-[#FF3366]'>
+            <h1 className='font-bold text-[33px] text-green-700 ml-2 cursor-pointer' onClick={()=>router.push('/')}>PlayZone</h1>
             <div className='flex gap-2 items-center sm:gap-4'>
                 <button onClick={()=>router.push('/create-post')} className='bg-black p-2 px-3 text-white rounded-full'>
                     <span className='hidden sm:block'>CREATE POST</span>
                     <HiPencilSquare className='sm:hidden text-[20px]' />
                 </button>
-                {!session?
-                <button className='bg-white text-gray-500 p-2 px-3 border-[1px] rounded-full' onClick={()=>signIn()}>
-                    <span className='hidden sm:block'>SIGN IN</span>
-                    <HiMiniArrowLeftOnRectangle className='sm:hidden text-[20px]' />
-                </button>
-                :
-                <button className='bg-white text-gray-500 p-2 px-3 border-[1px] rounded-full' onClick={()=>signOut()}>
-                    <span className='hidden sm:block'>SIGN OUT</span>
-                    <HiMiniArrowLeftOnRectangle className='sm:hidden text-[20px]' />
-                </button>
-                }
                 
                 <HiMiniChatBubbleLeft alt='chat'
                 className='cursor-pointer border border-gray-500 rounded-full text-[47px] p-1' 
                 onClick={()=>router.push('/chat')}/>
 
-                <Image src={session?session?.user?.image:USER_IMAGE} width={45} height={30} alt='user image' 
-                className='rounded-full cursor-pointer' onClick={()=>router.push('./profile')}/>
+                <details className="dropdown dropdown-end">
+                    <summary className="btn p-0 rounded-full m-1">
+                        <Image src={session?session?.user?.image:USER_IMAGE} width={45} height={30} alt='user image' 
+                        className='rounded-full cursor-pointer'/>
+                    </summary>
+                    <ul className="menu dropdown-content bg-base-100 rounded-box z-[1] w-52 p-2 shadow">
+                        <li onClick={(e)=>{
+                            router.push('./profile');
+                            e.target.closest('details').removeAttribute('open'); 
+                        }}>
+                            <a>Manage Post</a>
+                        </li>
+                        {!session?
+                            <li onClick={(e)=>{
+                                signIn();
+                                e.target.closest('details').removeAttribute('open'); 
+                            }}>
+                                <a>Sign In</a>
+                            </li>
+                        :
+                            <li onClick={(e)=>{
+                                signOut();
+                                e.target.closest('details').removeAttribute('open'); 
+                            }}>
+                                <a>Sign Out</a>
+                            </li>
+                        }
+                    </ul>
+                </details>
             </div>
         </div>
     )

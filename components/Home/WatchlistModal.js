@@ -10,7 +10,7 @@ function WatchlistModal({post, setModal, modal, profile}) {
   return (
     <div>
       <dialog id="my_modal_2" className="modal">
-        <div className="modal-box w-fit">
+        <div className="modal-box w-[370px]">
           <WatchlistItem post={post} modal={modal} profile={profile}/>
           <div method="modal-action">
             <form method='dialog'>

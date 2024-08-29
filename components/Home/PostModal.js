@@ -10,7 +10,7 @@ function PostModal({post, setModal, modal, profile}) {
   return (
     <div>
       <dialog id="my_modal_1" className="modal">
-        <div className="modal-box w-fit">
+        <div className="modal-box w-[370px]">
           <PostItem post={post} modal={modal} profile={profile}/>
           <div method="modal-action">
             <form method='dialog'>

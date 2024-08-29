@@ -87,11 +87,11 @@ function index() {
     return (
         <div>
             <div className='flex flex-col items-center justify-center mt-9'>
-                <div>
+                <div className='w-full'>
                     <h1 className='text-center text-blue-500 font-bold text-[35px]'>Your Activity</h1>
                     {activity?<WatchList posts={activity} profiles={false}/>:null}
                 </div>
-                <div>
+                <div className='w-full'>
                     <h1 className='text-center text-blue-500 font-bold text-[35px]'>Manage Post</h1>
                     {posts?<Posts posts={posts} profiles={true}/>:null}
                 </div>                

@@ -2,3 +2,17 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+    touch-action: pan-y; /* Allows vertical scrolling but prevents horizontal dragging */
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    user-select: none; /* Disables text selection */
+    -webkit-user-drag: none; /* Disables dragging of elements */
+    overscroll-behavior: contain; /* Prevents overscrolling on touch devices */
+}
+
+html, body {
+    width: 100%; /* Ensures the width stays at 100% */
+    height: 100%;
+    overflow-x: hidden; /* Prevents horizontal scrolling */
+    overscroll-behavior: contain; /* Prevents overscrolling on touch devices */
+}

@@ -49,7 +49,7 @@ function Form() {
     const handleSubmit=async(e)=>{
         e.preventDefault();
         console.log("Onsubmit", inputs);
-        const storageRef = ref(storage, 'ninja-player/'+file?.name);
+        const storageRef = ref(storage, 'ninja-player/'+file?.name+(Date.now().toString()));
         uploadBytes(storageRef, file).then((snapshot) => {
             console.log('Uploaded a blob or file!');
         }).then(resp=>{
