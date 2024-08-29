@@ -7,6 +7,7 @@ import {getFirestore, collection, getDocs, query, limit, startAfter} from "fireb
 import app from '../shared/FirebaseConfig'
 import { useEffect, useState, useCallback } from "react";
 import Posts from "@/components/Home/Posts";
+import { initial } from "lodash";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -45,8 +46,8 @@ export default function Home({initialPosts}) {
     <div className="flex flex-col items-center justify-center mt-9">
       <div className="w-[70%] md:w-[50%] lg:w-[55%]">
         <Hero />
-        <Search />
-        <GameList setPosts={setPosts} setFilterOn={setFilterOn}/>
+        <Search setPosts={setPosts} setFilterOn={setFilterOn} initialPosts={initialPosts}/>
+        <GameList setPosts={setPosts} setFilterOn={setFilterOn} initialPosts={initialPosts}/>
       </div>
       {loading? 
       (

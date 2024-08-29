@@ -3,24 +3,23 @@ import Data from './../../shared/Data'
 import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import Posts from './Posts';
 
-function GameList({setPosts, setFilterOn}) {
+function GameList({setPosts, setFilterOn, initialPosts}) {
     const [games, setGames] = useState([]);
     const db = getFirestore();
 
     useEffect(()=>{
         setGames(Data.GameList)
+        console.log(initialPosts)
     },[])
 
     const filterGame=async(item)=>{
         setFilterOn(true);
+        console.log(item.name)
         const newPosts = [];
-        const q = query(collection(db, "posts"),
-        where("game","==",item.name));
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach((doc)=>{
-            newPosts.push(doc.data());
-        })
-        setPosts(newPosts);
+        let filterResults = initialPosts.filter(post=>
+            post.game == item.name
+        )
+        setPosts(filterResults);
     }
 
     return (

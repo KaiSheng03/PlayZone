@@ -24,6 +24,8 @@ function Form() {
             userImage:session.user.image}));
         setInputs((values)=>({...values,
             email:session.user.email}));
+        setInputs((values)=>({...values,
+            game:"Cricket"}));
     },[session])
 
     useEffect(()=>{
@@ -68,9 +70,6 @@ function Form() {
                 <input type='text' onChange={handleChange} required placeholder='Location' name='location' className='w-full mb-4 border-[1px] p-2 rounded-md'/>
                 <input type='text' onChange={handleChange} required placeholder='Zip' name='zip' className='w-full mb-4 border-[1px] p-2 rounded-md'/>
                 <select name='game' onChange={handleChange} required className='w-full mb-4 border-[1px] p-2 rounded-md'>
-                    <option disabled defaultValue>
-                        Select Game
-                    </option>
                     {Data.GameList.map((item) => (
                         <option key={item.id}>{item.name}</option>
                     ))}

@@ -1,12 +1,19 @@
-import { collection, getFirestore, query, where } from 'firebase/firestore';
+import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import React, { useState } from 'react'
 
-function Search() {
+function Search({setPosts, setFilterOn, initialPosts}) {
     const db = getFirestore();
     const [searchText, setSearchText] = useState();
-    const onSearchButtonClick = () =>{
-        // console.log("Search Text: ", searchText);
-        
+
+    const onSearchButtonClick = async() =>{
+        let searchResults = initialPosts.filter(post=>
+            post.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+        console.log(searchResults);
+
+        // Set the filtered posts
+        setPosts(searchResults);
+        setFilterOn(true);
     }
     return (
         <div className='mt-7'>
