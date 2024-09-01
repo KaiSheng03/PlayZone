@@ -11,7 +11,7 @@ function Posts({posts, profiles}) {
       {posts.length > 0 ? (
         <>
           <PostModal post={post} setModal={setModal} modal={true} profile={profiles}/>
-            <div className='flex overflow-x-scroll gap-5 mt-5 px-7'>
+            <div className='bg-slate-100 py-5 flex overflow-x-scroll gap-5 mt-3 px-7'>
               {posts.map((item)=>(
                   <div onClick={()=>
                     {setPost(item);
@@ -30,9 +30,7 @@ function Posts({posts, profiles}) {
           No post found
         </div>
       )}
-      
     </div>
-    
   )
 }
 

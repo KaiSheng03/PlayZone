@@ -67,6 +67,7 @@ function Form() {
                 <input type="text" onChange={handleChange} required name='title' placeholder='Title' className='w-full mb-4 border-[1px] p-2 rounded-md'/>
                 <textarea name='desc' onChange={handleChange} required className='w-full mb-4 outline-blue-400 border-[1px] p-2 rounded-md' placeholder='Write Description Here'/>
                 <input type='date' onChange={handleChange} required name='date' className='w-full mb-4 border-[1px] p-2 rounded-md'/>
+                <input type='time' onChange={handleChange} required name='time' className='w-full mb-4 border-[1px] p-2 rounded-md'/>
                 <input type='text' onChange={handleChange} required placeholder='Location' name='location' className='w-full mb-4 border-[1px] p-2 rounded-md'/>
                 <input type='text' onChange={handleChange} required placeholder='Zip' name='zip' className='w-full mb-4 border-[1px] p-2 rounded-md'/>
                 <select name='game' onChange={handleChange} required className='w-full mb-4 border-[1px] p-2 rounded-md'>
@@ -75,7 +76,7 @@ function Form() {
                     ))}
                 </select>
                 <input type="file" onChange={(e)=>setFile(e.target.files[0])} accept="image/gif, image/jpeg, image/png" className="mb-5 border-[1px] w-full"/>
-                <button type='submit' className='bg-blue-500 w-full p-1 rounded-md text-white'>
+                <button type='submit' className='bg-blue-500 w-full p-1 h-[40px] rounded-lg text-white'>
                     Submit
                 </button>   
             </form>

@@ -1,13 +1,13 @@
-import React, { useEffect } from 'react'
-import { HiOutlineCalendar } from "react-icons/hi2";
-import { HiOutlineLocationMarker } from "react-icons/hi";
 import { arrayUnion, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from 'firebase/firestore';
-import { useRouter } from 'next/router';
 import { deleteObject, getStorage, ref } from 'firebase/storage';
 import { useSession } from 'next-auth/react';
-import { IoIosTime } from "react-icons/io";
+import { useRouter } from 'next/router';
+import React, { useEffect } from 'react'
+import { HiOutlineLocationMarker } from 'react-icons/hi';
+import { HiOutlineCalendar } from 'react-icons/hi2';
+import { IoIosTime } from 'react-icons/io';
 
-function PostItem({post, profile, modal}) {
+function NextWeekPostItem({post, profile, modal}) {
     const db = getFirestore();
     const router = useRouter();
     const storage = getStorage();
@@ -166,4 +166,4 @@ function PostItem({post, profile, modal}) {
   )
 }
 
-export default PostItem
+export default NextWeekPostItem

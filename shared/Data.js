@@ -31,9 +31,29 @@ const GameList=[
     },
     {
         id:7,
+        name:'Baseball',
+        image:'./Images/Baseball.jpg'
+    },
+    {
+        id:8,
+        name:'Swimming',
+        image:'./Images/Swimming.jpg'
+    },
+    {
+        id:9,
+        name:'Jogging',
+        image:'./Images/Jogging.jpg'
+    },
+    {
+        id:10,
+        name:'Golf',
+        image:'./Images/Golf.jpg'
+    },
+    {
+        id:11,
         name:'Other Games',
         image:'./Images/Puzzle.png'
-    }
+    },
 ]
 
 export default{

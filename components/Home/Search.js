@@ -1,18 +1,25 @@
 import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import React, { useState } from 'react'
 
-function Search({setPosts, setFilterOn, initialPosts}) {
+function Search({setPosts, setNextWeekDisplay, setFilterOn, initialPosts, nextWeekPosts}) {
     const db = getFirestore();
     const [searchText, setSearchText] = useState();
 
     const onSearchButtonClick = async() =>{
+        if(!searchText){
+            return;
+        }
         let searchResults = initialPosts.filter(post=>
             post.title.toLowerCase().includes(searchText.toLowerCase())
         );
-        console.log(searchResults);
+
+        let searchResults2 = nextWeekPosts.filter(post=>
+            post.title.toLowerCase().includes(searchText.toLowerCase())
+        );
 
         // Set the filtered posts
         setPosts(searchResults);
+        setNextWeekDisplay(searchResults2);
         setFilterOn(true);
     }
     return (

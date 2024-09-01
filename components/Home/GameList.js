@@ -3,23 +3,26 @@ import Data from './../../shared/Data'
 import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import Posts from './Posts';
 
-function GameList({setPosts, setFilterOn, initialPosts}) {
+function GameList({setPosts, setNextWeekDisplay, setFilterOn, initialPosts, nextWeekPosts}) {
     const [games, setGames] = useState([]);
     const db = getFirestore();
 
     useEffect(()=>{
-        setGames(Data.GameList)
-        console.log(initialPosts)
+        setGames(Data.GameList);
     },[])
 
     const filterGame=async(item)=>{
         setFilterOn(true);
-        console.log(item.name)
         const newPosts = [];
         let filterResults = initialPosts.filter(post=>
             post.game == item.name
         )
+
+        let filterResults2 = nextWeekPosts.filter(post=>
+            post.game == item.name
+        )
         setPosts(filterResults);
+        setNextWeekDisplay(filterResults2);
     }
 
     return (

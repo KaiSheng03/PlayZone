@@ -15,7 +15,7 @@ function WatchList({posts, profiles}) {
       {posts.length > 0 ? (
         <>
           <WatchlistModal post={watchlist} setModal={setModal} modal={true} profile={profiles}/>
-            <div className='flex overflow-x-scroll gap-5 mt-5 px-7'>
+            <div className='bg-slate-100 py-5 flex overflow-x-scroll gap-5 mt-5 px-7'>
                 {posts.map((item)=>(
                     <div onClick={()=>
                         {setWatchlist(item);
