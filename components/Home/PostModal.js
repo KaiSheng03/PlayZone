@@ -5,7 +5,7 @@ import { HiOutlineXCircle } from 'react-icons/hi2'
 function PostModal({post, setModal, modal, profile}) {
   useEffect(()=>{
     console.log(post);
-})
+  })
 
   return (
     <div>
