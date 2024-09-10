@@ -1,13 +1,17 @@
 import React, { useEffect } from 'react'
-import { HiOutlineXCircle } from 'react-icons/hi2';
-import NextWeekPostItem from './NextWeekPostItem';
+import UpcomingPostItem from './UpcomingPostItem'
+import { HiOutlineXCircle } from 'react-icons/hi2'
 
-function NextWeekPostModal({post, setModal, modal, profile}) {
+function UpcomingPostModal({post, setModal, modal, profile}) {
+  useEffect(()=>{
+    console.log(post);
+  })
+
   return (
     <div>
-      <dialog id="my_modal_2" className="modal">
+      <dialog id="my_modal_1" className="modal">
         <div className="modal-box p-0 sm:p-[1.5rem] w-fit">
-          <NextWeekPostItem post={post} modal={modal} profile={profile}/>
+          <UpcomingPostItem post={post} modal={modal} profile={profile}/>
           <div method="modal-action">
             <form method='dialog'>
               <button className='text-[22px] absolute top-2 right-2' onClick={()=>setModal(false)}>
@@ -18,7 +22,8 @@ function NextWeekPostModal({post, setModal, modal, profile}) {
         </div>
       </dialog>
     </div>
+    
   )
 }
 
-export default NextWeekPostModal
+export default UpcomingPostModal

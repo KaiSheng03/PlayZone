@@ -3,10 +3,6 @@ import { HiOutlineXCircle } from 'react-icons/hi2'
 import WatchlistItem from './WatchlistItem';
 
 function WatchlistModal({post, setModal, modal, profile}) {
-  useEffect(()=>{
-    console.log(post);
-})
-
   return (
     <div>
       <dialog id="my_modal_2" className="modal">
@@ -21,10 +17,7 @@ function WatchlistModal({post, setModal, modal, profile}) {
           </div>
         </div>
       </dialog>
-
-        
     </div>
-    
   )
 }
 

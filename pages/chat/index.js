@@ -11,56 +11,62 @@ function index() {
     const db = getFirestore(app);
     const [users, setUsers] = useState([]);
     const [loading, setLoading] = useState(true);
-    const [sessionData, setSessionData] = useState();
+    const [sessionData, setSessionData] = useState([]);
+    const userMap = new Map();
 
     const fetchSession=async()=>{
       const currentSession = session || await getSession();
       if(currentSession){
         setSessionData(currentSession);
-        const sentQuery = query(collection(db, "chat"),
-        where("sender", "==", currentSession.user.email));
-
-        const receivedQuery = query(collection(db, "chat"),
-        where("receiver", "==", currentSession.user.email));
-
-        const sentSnapshot = await getDocs(sentQuery)
-        const receivedSnapshot = await getDocs(receivedQuery);
-
-        const userMap = new Map();
-
-        const addToUserMap=async(email, name) => {
-          if (!userMap.has(email)) {
-            const userQuery = query(collection(db, "users"), where("email", "==", email));
-            const userSnapshot = await getDocs(userQuery);
-            let image = '';
-            userSnapshot.forEach((user) => {
-              image = user.data().image;
-            });
-            userMap.set(email, { email, name, image });
-          }
-        };
-
-        const sentPromises = sentSnapshot.docs.map(async(item)=>{
-          const email = item.data().receiver;
-          const name = item.data().receiverName;
-          await addToUserMap(email, name);
-        });
-
-        const receivedPromises = receivedSnapshot.docs.map(async (item) => {
-          const email = item.data().sender;
-          const name = item.data().senderName;
-          await addToUserMap(email, name);
-        });
-
-        
-        await Promise.all([...sentPromises, ...receivedPromises]);
-        setUsers(Array.from(userMap.values()));
+        fetchChatUsers(currentSession);
       }
       else{
         router.push('/');
       }
     }
     
+    const fetchChatUsers=async(currentSession)=>{
+      const sentQuery = query(collection(db, "chat"),
+      where("sender", "==", currentSession.user.email));
+
+      const receivedQuery = query(collection(db, "chat"),
+      where("receiver", "==", currentSession.user.email));
+
+      const sentSnapshot = await getDocs(sentQuery)
+      const receivedSnapshot = await getDocs(receivedQuery);
+
+      setPromises(sentSnapshot, receivedSnapshot);
+    }
+
+    const addToUserMap=async(email, name) => {
+      if (!userMap.has(email)) {
+        const userQuery = query(collection(db, "users"), where("email", "==", email));
+        const userSnapshot = await getDocs(userQuery);
+        let image = '';
+        userSnapshot.forEach((user) => {
+          image = user.data().image;
+        });
+        userMap.set(email, { email, name, image });
+      }
+    };
+
+    const setPromises=async(sentSnapshot, receivedSnapshot)=>{
+      const sentPromises = sentSnapshot.docs.map(async(item)=>{
+        const email = item.data().receiver;
+        const name = item.data().receiverName;
+        await addToUserMap(email, name);
+      });
+
+      const receivedPromises = receivedSnapshot.docs.map(async (item) => {
+        const email = item.data().sender;
+        const name = item.data().senderName;
+        await addToUserMap(email, name);
+      });
+      
+      await Promise.all([...sentPromises, ...receivedPromises]);
+      setUsers(Array.from(userMap.values()));
+    }
+
     const fetchLastContent=async(user)=>{
       const q = query(collection(db, "chat"),
       where("sender", "in", [sessionData.user.email, user.email]),

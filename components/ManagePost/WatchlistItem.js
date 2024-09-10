@@ -12,10 +12,6 @@ function ActivityItem({post, profile, modal}) {
     const storage = getStorage();
     const USER_IMAGE = `${post.userImage}`;
     const {data:session} = useSession();
-
-    useEffect(()=>{
-        console.log(post);
-    })
     
     const removeActivity=async()=>{
         const removeRef = query(collection(db, "users"),

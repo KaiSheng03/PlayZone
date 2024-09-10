@@ -9,6 +9,7 @@ import { useEffect, useState, useCallback } from "react";
 import Posts from "@/components/Home/Posts";
 import { initial } from "lodash";
 import NextWeekPost from "@/components/Home/NextWeekPost";
+import UpcomingPosts from "@/components/Home/UpcomingPosts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -29,14 +30,36 @@ export async function getServerSideProps(){
 export default function Home({initialPosts}) {
   const db=getFirestore(app);
   const [posts, setPosts] = useState([]);
-  const [nextWeekPosts, setNextWeekPosts] = useState();
-  const [loading, setLoading] = useState(true);
-  const [filterOn, setFilterOn] = useState(false);
-  const [upcomingPosts, setUpcomingPosts] = useState();
+
+  const [nextWeekPosts, setNextWeekPosts] = useState([]);
   const [nextWeekDisplay, setNextWeekDisplay] = useState([]);
 
-  useEffect(()=>{
-    if(!upcomingPosts){
+  const [upcomingPosts, setUpcomingPosts] = useState([]);
+  const [upcomingDisplay, setUpcomingDisplay] = useState([]);
+
+  const [loading, setLoading] = useState(true);
+  const [filterOn, setFilterOn] = useState(false);
+  
+  const sortAllPosts = (posts, sortBy) =>{
+    // A - B : Ascending : 1
+    // B - A : Descending : -1
+    posts.sort((a, b) => {
+      const dateA = new Date(a.date);
+      const dateB = new Date(b.date);
+  
+      if(dateA.getTime() !== dateB.getTime()){
+        return (sortBy * (dateA - dateB));
+      }
+      const timeA = a.time ? a.time.split(":").map(Number) : [0,0];
+      const timeB = b.time ? b.time.split(":").map(Number) : [0,0];
+
+      if(timeA[0] !== timeB[0]) return (sortBy * (timeA[0] - timeB[0]));
+      if(timeA[1] !== timeB[1]) return (sortBy * (timeA[1] - timeB[1]));
+    })
+  }
+
+  const fetchUpcomingPosts = () =>{
+    if(upcomingPosts <= 0){
       let filteredByDatePosts = initialPosts.filter((post)=>{
         const postDate = new Date(post.date);
         const currentDate = new Date();
@@ -45,19 +68,7 @@ export default function Home({initialPosts}) {
         return (postDate >= currentDate);
       })
 
-      filteredByDatePosts.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-    
-        if(dateA.getTime() !== dateB.getTime()){
-          return dateA - dateB;
-        }
-        const timeA = a.time ? a.time.split(":").map(Number) : [0,0];
-        const timeB = b.time ? b.time.split(":").map(Number) : [0,0];
-    
-        if(timeA[0] !== timeB[0]) return timeA[0] - timeB[0];
-        if(timeA[1] !== timeB[1]) return timeA[1] - timeB[1];
-      })
+      sortAllPosts(filteredByDatePosts, 1);
 
       const currentDate = new Date();
       currentDate.setHours(0,0,0,0);
@@ -75,26 +86,14 @@ export default function Home({initialPosts}) {
         postDate.setHours(0,0,0,0);
         return postDate >= startOfWeek && postDate <= endOfWeek;
       })
-      setUpcomingPosts(upcomingPost)
-      console.log(filteredByDatePosts);
+      setUpcomingPosts(upcomingPost);
     }
-  },[upcomingPosts])
+  }
 
-  useEffect(()=>{
-    if(!nextWeekPosts){
-      initialPosts.sort((a, b) => {
-        const dateA = new Date(a.date);
-        const dateB = new Date(b.date);
-    
-        if(dateA.getTime() !== dateB.getTime()){
-          return dateA - dateB;
-        }
-        const timeA = a.time ? a.time.split(":").map(Number) : [0,0];
-        const timeB = b.time ? b.time.split(":").map(Number) : [0,0];
-    
-        if(timeA[0] !== timeB[0]) return timeA[0] - timeB[0];
-        if(timeA[1] !== timeB[1]) return timeA[1] - timeB[1];
-      })
+  const fetchNextWeekPosts = () =>{
+    if(nextWeekPosts <= 0){
+      const allPosts = initialPosts;
+      sortAllPosts(allPosts, 1);
 
       const currentDate = new Date();
       const startOfCurrentWeek = new Date(currentDate);
@@ -113,24 +112,30 @@ export default function Home({initialPosts}) {
       endOfNextWeek.setDate(endOfCurrentWeek.getDate() + 7)
       endOfCurrentWeek.setHours(0,0,0,0);
 
-      const nextWeekPosts = initialPosts.filter((post)=>{
+      const nextWeekPosts = allPosts.filter((post)=>{
         const postDate = new Date(post.date);
         postDate.setHours(0,0,0,0);
         return postDate >= startOfNextWeek && postDate <= endOfNextWeek;
       })
-      console.log(nextWeekPosts);
       setNextWeekPosts(nextWeekPosts);
     }
+  }
+
+  useEffect(()=>{
+    fetchUpcomingPosts();
+    fetchNextWeekPosts();
+    sortAllPosts(initialPosts, -1);
   },[])
 
   useEffect(()=>{
     getPost();
-  },[filterOn, upcomingPosts])
+  },[filterOn, upcomingPosts, nextWeekPosts, posts])
 
   const getPost = async() =>{
     if(!filterOn){
-      setPosts(upcomingPosts); // This week posts
-      setNextWeekDisplay(nextWeekPosts);
+      setPosts(initialPosts);
+      setUpcomingDisplay(upcomingPosts); // This week posts
+      setNextWeekDisplay(nextWeekPosts); // Next week posts
       setLoading(false);
     }
   }
@@ -147,36 +152,30 @@ export default function Home({initialPosts}) {
     <div className="flex flex-col items-center justify-center mt-5">
       <div className="w-[70%] md:w-[50%] lg:w-[55%]">
         <Hero />
-        <Search setPosts={setPosts} setNextWeekDisplay={setNextWeekDisplay} setFilterOn={setFilterOn} initialPosts={upcomingPosts} nextWeekPosts={nextWeekPosts}/>
-        <GameList setPosts={setPosts} setNextWeekDisplay={setNextWeekDisplay} setFilterOn={setFilterOn} initialPosts={upcomingPosts} nextWeekPosts={nextWeekPosts}/>
+        <Search setUpcomingDisplay={setUpcomingDisplay} setNextWeekDisplay={setNextWeekDisplay} setPosts={setPosts} setFilterOn={setFilterOn} upcomingPosts={upcomingPosts} nextWeekPosts={nextWeekPosts} posts={posts}/>
+        <GameList setUpcomingDisplay={setUpcomingDisplay} setNextWeekDisplay={setNextWeekDisplay} setPosts={setPosts} setFilterOn={setFilterOn} upcomingPosts={upcomingPosts} nextWeekPosts={nextWeekPosts} posts={posts}/>
       </div>
-      {loading? 
-      (
-        <div className="mt-9">
-          Loading...
+      
+      {filterOn && (
+        <div>
+          <button className="btn mt-3" onClick={()=>setFilterOn(false)}>
+            Remove filter
+          </button>
         </div>
-      ) 
-      : 
-      (
-        <>
-        {filterOn && (
-          <div>
-            <button className="btn mt-3" onClick={()=>setFilterOn(false)}>
-              Remove filter
-            </button>
-          </div>
-        )}
-        
-        <div className="this-week w-full mt-5">
-          <h1 className="font-bold ml-5 text-[30px] text-blue-500">This Week</h1>
-          {posts? <Posts posts={posts} profiles={false}/>:null}
-        </div>
-        <div className="this-week w-full mt-5">
-          <h1 className="font-bold ml-5 text-[30px] text-blue-500">Next Week</h1>
-          {posts? <NextWeekPost posts={nextWeekDisplay} profiles={false}/>:null}
-        </div>
-        </>
       )}
+      
+      <div className="this-week w-full mt-5">
+        <h1 className="font-bold ml-5 text-[30px] text-blue-500">This Week</h1>
+        {upcomingDisplay? <UpcomingPosts posts={upcomingDisplay} profiles={false}/>:null}
+      </div>
+      <div className="next-week w-full mt-5">
+        <h1 className="font-bold ml-5 text-[30px] text-blue-500">Next Week</h1>
+        {nextWeekDisplay? <NextWeekPost posts={nextWeekDisplay} profiles={false}/>:null}
+      </div>
+      <div className="all w-full mt-5">
+        <h1 className="font-bold ml-5 text-[30px] text-blue-500">All Posts</h1>
+        {posts? <Posts posts={posts} profiles={false}/>:null}
+      </div>
     </div>
   )
 }

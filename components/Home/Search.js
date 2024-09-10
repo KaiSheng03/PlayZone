@@ -1,7 +1,7 @@
 import { collection, getDocs, getFirestore, query, where } from 'firebase/firestore';
 import React, { useState } from 'react'
 
-function Search({setPosts, setNextWeekDisplay, setFilterOn, initialPosts, nextWeekPosts}) {
+function Search({setUpcomingDisplay, setNextWeekDisplay, setPosts, setFilterOn, upcomingPosts, nextWeekPosts, posts}) {
     const db = getFirestore();
     const [searchText, setSearchText] = useState();
 
@@ -9,17 +9,22 @@ function Search({setPosts, setNextWeekDisplay, setFilterOn, initialPosts, nextWe
         if(!searchText){
             return;
         }
-        let searchResults = initialPosts.filter(post=>
+        let searchForUpcoming = upcomingPosts.filter(post=>
             post.title.toLowerCase().includes(searchText.toLowerCase())
         );
 
-        let searchResults2 = nextWeekPosts.filter(post=>
+        let searchForNextWeek = nextWeekPosts.filter(post=>
+            post.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+
+        let searchForPosts = posts.filter(post=>
             post.title.toLowerCase().includes(searchText.toLowerCase())
         );
 
         // Set the filtered posts
-        setPosts(searchResults);
-        setNextWeekDisplay(searchResults2);
+        setUpcomingDisplay(searchForUpcoming);
+        setNextWeekDisplay(searchForNextWeek);
+        setPosts(searchForPosts);
         setFilterOn(true);
     }
     return (

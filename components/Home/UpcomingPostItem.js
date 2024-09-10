@@ -1,13 +1,13 @@
+import React, { useEffect } from 'react'
+import { HiOutlineCalendar } from "react-icons/hi2";
+import { HiOutlineLocationMarker } from "react-icons/hi";
 import { arrayUnion, collection, deleteDoc, doc, getDocs, getFirestore, query, updateDoc, where } from 'firebase/firestore';
+import { useRouter } from 'next/router';
 import { deleteObject, getStorage, ref } from 'firebase/storage';
 import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/router';
-import React, { useEffect } from 'react'
-import { HiOutlineLocationMarker } from 'react-icons/hi';
-import { HiOutlineCalendar } from 'react-icons/hi2';
-import { IoIosTime } from 'react-icons/io';
+import { IoIosTime } from "react-icons/io";
 
-function NextWeekPostItem({post, profile, modal}) {
+function UpcomingPostItem({post, profile, modal}) {
     const db = getFirestore();
     const router = useRouter();
     const storage = getStorage();
@@ -79,19 +79,20 @@ function NextWeekPostItem({post, profile, modal}) {
                     <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">{post.desc}</p>
                 )}   
                 
-                {modal && (
-                    <div>
-                        <p className='font-bold text-[18px] mb-2'>
-                            Posted by  
-                        </p>
-                        <div className='flex items-center gap-2'>
-                            <img src={USER_IMAGE} alt='' width={45} height={60} className='rounded-full cursor-pointer'
-                            onClick={()=>routeToProfile()}/>
-                            <p className='font-bold'>{post.username}</p>
+                {
+                    modal && (
+                        <div>
+                            <p className='font-bold text-[18px] mb-2'>
+                                Posted by  
+                            </p>
+                            <div className='flex items-center gap-2'>
+                                <img src={USER_IMAGE} alt='' width={45} height={60} className='rounded-full cursor-pointer'
+                                onClick={()=>routeToProfile()}/>
+                                <p className='font-bold'>{post.username}</p>
+                            </div>
                         </div>
-                    </div>
-                )}
-                
+                    )
+                }
                 <div className="card-actions">
                     {modal && !profile &&(
                         <div className='w-full mt-2'>
@@ -115,7 +116,7 @@ function NextWeekPostItem({post, profile, modal}) {
                 </div>
             </div>
         </div>
-    )
+  )
 }
 
-export default NextWeekPostItem
+export default UpcomingPostItem
